@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta name="generator" content="Hugo 0.160.1">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>David Rondon | Propulsion · CFD · Aerospace Systems</title>
@@ -12,7 +11,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
 <style>
- 
+/* ============================================================
+   RESET & BASE
+   ============================================================ */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
   --bg: #0a0a0a;
@@ -36,7 +37,9 @@ body {
   overflow-x: hidden;
 }
 
- 
+/* ============================================================
+   NAV
+   ============================================================ */
 .site-nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
   background: rgba(10,10,10,0.88);
@@ -80,7 +83,9 @@ body {
 }
 .nav-cta:hover { background: var(--accent); color: #0a0a0a; }
 
- 
+/* ============================================================
+   HERO
+   ============================================================ */
 .hero {
   min-height: 100vh;
   display: flex; align-items: center;
@@ -156,28 +161,85 @@ body {
 }
 .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
 
- 
+/* Hero Visual */
 .hero-visual { display: flex; justify-content: center; align-items: center; }
-.nozzle-scene {
+.solar-scene {
   position: relative; width: 480px; height: 480px;
   display: flex; align-items: center; justify-content: center;
 }
-#nozzleCanvas {
-  position: absolute; inset: 0;
-  width: 100%; height: 100%;
+.orbit {
+  position: absolute; width: 420px; height: 420px;
+  border-radius: 50%;
+  top: 50%; left: 50%;
+  margin-top: -210px; margin-left: -210px;
+  animation: orbit-spin 40s linear infinite;
+  transform: rotate(var(--start));
+  animation-delay: calc(var(--start) / 360deg * -40s);
+  pointer-events: none;
 }
-.nozzle-stats {
-  position: absolute; bottom: 0; left: 0; right: 0;
-  display: flex; justify-content: space-around;
-  padding: 0.5rem 0;
-  z-index: 10;
+@keyframes orbit-spin {
+  from { transform: rotate(var(--start)); }
+  to   { transform: rotate(calc(var(--start) + 360deg)); }
 }
-.nstat {
-  display: flex; flex-direction: column; align-items: center; gap: 2px;
-  font-family: var(--font-mono);
+.planet {
+  position: absolute; top: 0; left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  animation: planet-counter 40s linear infinite;
 }
-.nstat-label { font-size: 0.55rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); }
-.nstat-val { font-size: 0.75rem; font-weight: 700; color: var(--accent2); }
+@keyframes planet-counter {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to   { transform: translate(-50%, -50%) rotate(-360deg); }
+}
+.planet-sun { width:34px;height:34px; background:radial-gradient(circle at 35% 35%,#fff8b0 0%,#ffec40 20%,#ffb800 55%,#ff7800 85%,#e04800 100%); box-shadow:0 0 18px 6px rgba(255,180,30,.55),0 0 40px 12px rgba(255,120,0,.25); }
+.planet-mercury { width:9px;height:9px; background:radial-gradient(circle at 35% 35%,#cac6bf 0%,#9e9790 50%,#6a6158 100%); box-shadow:0 0 4px rgba(180,170,160,.3); }
+.planet-venus { width:14px;height:14px; background:radial-gradient(circle at 35% 35%,#f6e8b0 0%,#e9ce75 40%,#c8a040 80%,#a07828 100%); box-shadow:0 0 8px rgba(230,190,80,.4); }
+.planet-earth { width:16px;height:16px; background:radial-gradient(circle at 35% 35%,#6ac4f8 0%,#2070cc 45%,#0a3870 100%); box-shadow:0 0 8px rgba(60,140,255,.35); overflow:hidden; }
+.planet-earth::after { content:''; position:absolute; inset:2px 3px; border-radius:50%; background:radial-gradient(circle at 40% 45%,rgba(60,158,72,.85) 0%,transparent 60%),radial-gradient(circle at 65% 65%,rgba(60,158,72,.7) 0%,transparent 40%); }
+.planet-mars { width:12px;height:12px; background:radial-gradient(circle at 35% 35%,#e88870 0%,#c85530 45%,#7a2810 100%); box-shadow:0 0 6px rgba(200,85,48,.35); }
+.planet-jupiter { width:32px;height:32px; background:radial-gradient(circle at 35% 35%,#f2dca8 0%,#d4a060 35%,#b87838 75%,#8a5020 100%); box-shadow:0 0 10px rgba(200,140,60,.3); overflow:hidden; }
+.planet-jupiter::after { content:''; position:absolute; inset:0; border-radius:50%; background:linear-gradient(transparent 12%,rgba(175,105,45,.45) 12%,rgba(175,105,45,.45) 22%,transparent 22%),linear-gradient(transparent 30%,rgba(245,215,155,.35) 30%,rgba(245,215,155,.35) 42%,transparent 42%),linear-gradient(transparent 50%,rgba(168,95,38,.45) 50%,rgba(168,95,38,.45) 60%,transparent 60%),linear-gradient(transparent 68%,rgba(228,185,115,.35) 68%,rgba(228,185,115,.35) 78%,transparent 78%); }
+.planet-saturn { width:26px;height:26px; background:radial-gradient(circle at 35% 35%,#f2e2b0 0%,#d8c872 38%,#b89838 78%,#8a7222 100%); box-shadow:-22px 0 0 -8px rgba(210,190,140,.3),22px 0 0 -8px rgba(210,190,140,.3),0 0 0 8px rgba(205,185,138,.18),0 0 0 14px rgba(195,175,130,.12),0 0 0 20px rgba(185,165,120,.08); }
+.planet-uranus { width:20px;height:20px; background:radial-gradient(circle at 35% 35%,#d0f4f4 0%,#85dcdc 40%,#42aaaa 80%,#207878 100%); box-shadow:0 0 10px rgba(100,220,220,.3),0 0 0 5px rgba(160,235,235,.12),0 0 0 9px rgba(160,235,235,.07); }
+.planet-neptune { width:18px;height:18px; background:radial-gradient(circle at 35% 35%,#8898f8 0%,#3252d8 40%,#1832a8 80%,#0a1870 100%); box-shadow:0 0 10px rgba(80,110,255,.35); }
+.planet-pluto { width:7px;height:7px; background:radial-gradient(circle at 35% 35%,#ecdcc8 0%,#baa080 50%,#806848 100%); }
+.planet-label {
+  position:absolute; top:0; left:50%;
+  font-family:var(--font-mono); font-size:0.42rem;
+  letter-spacing:0.1em; text-transform:uppercase;
+  color:rgba(240,237,232,.55); white-space:nowrap;
+  pointer-events:none; transform-origin:center center;
+}
+.solar-scene .visual-frame { position:absolute; z-index:10; }
+.visual-frame {
+  width: 180px; height: 180px;
+  border: 1px solid rgba(200,169,110,0.25);
+  border-radius: 50%;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 0.3rem;
+  background: radial-gradient(circle, rgba(200,169,110,0.06) 0%, transparent 70%);
+}
+.visual-ring {
+  position: absolute; border-radius: 50%;
+  border: 1px solid rgba(200,169,110,0.08);
+  top: 50%; left: 50%; transform: translate(-50%,-50%);
+}
+.ring-1 { width: 200px; height: 200px; }
+.ring-2 { width: 240px; height: 240px; }
+.ring-3 { width: 290px; height: 290px; }
+.vc-label { font-family:var(--font-mono); font-size:0.6rem; color:var(--text-muted); }
+.vc-val { font-family:var(--font-mono); font-size:1.4rem; font-weight:700; color:var(--accent); }
+.visual-stat {
+  position: absolute;
+  font-family: var(--font-mono); font-size: 0.6rem;
+  display: flex; flex-direction: column; gap: 1px;
+}
+.visual-stat span { color: var(--text-muted); }
+.visual-stat strong { color: var(--accent2); font-size: 0.75rem; }
+.vs-1 { top: 20%; right: -3rem; text-align: right; }
+.vs-2 { bottom: 20%; right: -3rem; text-align: right; }
+.vs-3 { bottom: 20%; left: -3.5rem; }
 .hero-scroll-hint {
   position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
   display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
@@ -197,7 +259,9 @@ body {
   100% { transform: scaleY(0); transform-origin: bottom; }
 }
 
- 
+/* ============================================================
+   SECTIONS COMMON
+   ============================================================ */
 .section-inner {
   max-width: 1200px; margin: 0 auto; padding: 5rem 2rem;
 }
@@ -222,7 +286,9 @@ body {
 }
 .section-link:hover { opacity: 0.7; }
 
- 
+/* ============================================================
+   EXPERIENCE SECTION
+   ============================================================ */
 .section-experience {
   border-top: 1px solid var(--border);
   background: var(--surface);
@@ -284,7 +350,9 @@ body {
   padding: 0.25rem 0.6rem; border-radius: 2px;
 }
 
- 
+/* ============================================================
+   PROJECTS
+   ============================================================ */
 .section-projects { border-top: 1px solid var(--border); }
 .project-grid {
   display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem;
@@ -332,7 +400,7 @@ body {
   padding: 0.2rem 0.5rem; border-radius: 2px;
 }
 
- 
+/* Research badge on project cards */
 .card-research-badge {
   position: absolute; top: 1rem; right: 1rem;
   font-family: var(--font-mono); font-size: 0.6rem;
@@ -349,7 +417,9 @@ body {
   opacity: 0.8;
 }
 
- 
+/* ============================================================
+   RESEARCH
+   ============================================================ */
 .section-research { border-top: 1px solid var(--border); background: var(--surface); }
 .research-list { display: flex; flex-direction: column; }
 .research-item { border-bottom: 1px solid var(--border); }
@@ -374,7 +444,9 @@ body {
 }
 .ri-arrow { color: var(--accent); font-size: 1.1rem; }
 
- 
+/* ============================================================
+   ABOUT SKILLS
+   ============================================================ */
 .section-about { border-top: 1px solid var(--border); }
 .about-inner {
   display: grid; grid-template-columns: 1fr 1fr;
@@ -400,7 +472,9 @@ body {
   color: var(--text-muted);
 }
 
- 
+/* ============================================================
+   FOOTER
+   ============================================================ */
 .site-footer {
   border-top: 1px solid var(--border);
   background: var(--surface);
@@ -423,7 +497,9 @@ body {
 .footer-links a:hover { color: var(--accent); }
 .footer-copy { font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); }
 
- 
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
 @media (max-width: 900px) {
   .hero-inner { grid-template-columns: 1fr; }
   .hero-visual { display: none; }
@@ -431,11 +507,13 @@ body {
   .project-card--featured { grid-column: span 1; }
   .about-inner { grid-template-columns: 1fr; gap: 3rem; }
   .exp-item { grid-template-columns: 1fr; gap: 0.5rem; }
-  .nozzle-scene { width: 380px; height: 380px; }
+  .solar-scene { width: 380px; height: 380px; }
+  .orbit { width: 340px; height: 340px; margin-top: -170px; margin-left: -170px; }
 }
 @media (max-width: 640px) {
   .nav-links { display: none; }
-  .nozzle-scene { width: 300px; height: 300px; }
+  .solar-scene { width: 300px; height: 300px; }
+  .orbit { width: 270px; height: 270px; margin-top: -135px; margin-left: -135px; }
 }
 </style>
 </head>
@@ -484,13 +562,28 @@ body {
       </div>
     </div>
     <div class="hero-visual">
-      <div class="nozzle-scene">
-        <canvas id="nozzleCanvas" width="480" height="480"></canvas>
-        <div class="nozzle-stats">
-          <div class="nstat"><span class="nstat-label">M∞</span><span class="nstat-val">2.4</span></div>
-          <div class="nstat"><span class="nstat-label">Isp</span><span class="nstat-val">312 s</span></div>
-          <div class="nstat"><span class="nstat-label">Pc</span><span class="nstat-val">500 psi</span></div>
-          <div class="nstat"><span class="nstat-label">Re</span><span class="nstat-val">4.2×10⁶</span></div>
+      <div class="solar-scene">
+        <div class="orbit" style="--start:0deg"><div class="planet planet-sun"></div><div class="planet-label">Sun</div></div>
+        <div class="orbit" style="--start:36deg"><div class="planet planet-mercury"></div><div class="planet-label">Mercury</div></div>
+        <div class="orbit" style="--start:72deg"><div class="planet planet-venus"></div><div class="planet-label">Venus</div></div>
+        <div class="orbit" style="--start:108deg"><div class="planet planet-earth"></div><div class="planet-label">Earth</div></div>
+        <div class="orbit" style="--start:144deg"><div class="planet planet-mars"></div><div class="planet-label">Mars</div></div>
+        <div class="orbit" style="--start:180deg"><div class="planet planet-jupiter"></div><div class="planet-label">Jupiter</div></div>
+        <div class="orbit" style="--start:216deg"><div class="planet planet-saturn"></div><div class="planet-label">Saturn</div></div>
+        <div class="orbit" style="--start:252deg"><div class="planet planet-uranus"></div><div class="planet-label">Uranus</div></div>
+        <div class="orbit" style="--start:288deg"><div class="planet planet-neptune"></div><div class="planet-label">Neptune</div></div>
+        <div class="orbit" style="--start:324deg"><div class="planet planet-pluto"></div><div class="planet-label">Pluto</div></div>
+        <div class="visual-frame">
+          <div class="visual-ring ring-1"></div>
+          <div class="visual-ring ring-2"></div>
+          <div class="visual-ring ring-3"></div>
+          <div class="visual-center">
+            <span class="vc-label">M∞</span>
+            <span class="vc-val">2.4</span>
+          </div>
+          <div class="visual-stat vs-1"><span>Re</span><strong>4.2×10⁶</strong></div>
+          <div class="visual-stat vs-2"><span>Isp</span><strong>312 s</strong></div>
+          <div class="visual-stat vs-3"><span>Pc</span><strong>500 psi</strong></div>
         </div>
       </div>
     </div>
@@ -501,7 +594,9 @@ body {
   </div>
 </section>
 
-
+<!-- ============================================================
+     EXPERIENCE SECTION
+     ============================================================ -->
 <section class="section-experience" id="experience">
   <div class="section-inner">
     <div class="section-header">
@@ -512,6 +607,23 @@ body {
       <a href="/experience/" class="section-link">View Timeline →</a>
     </div>
     <div class="experience-list">
+
+      <div class="exp-item">
+        <div class="exp-meta">
+          <p class="exp-period">Summer 2026</p>
+          <p class="exp-company">AMAZON</p>
+          <p class="exp-location">Area Maintenance Manager Intern</p>
+        </div>
+        <div class="exp-body">
+          <h3 class="exp-role">Project Management Intern</h3>
+          <ul class="exp-bullets">
+            <li>COMING SOON.</li>
+          </ul>
+          <div class="exp-skills">
+            <span class="exp-skill">Project Management</span>
+          </div>
+        </div>
+      </div>
 
       <div class="exp-item">
         <div class="exp-meta">
@@ -564,10 +676,10 @@ body {
         <div class="exp-meta">
           <p class="exp-period">Spring 2024 – Present</p>
           <p class="exp-company">Papa Johns</p>
-          <p class="exp-location">Atlanta, GA</p>
+          <p class="exp-location">Project Manager</p>
         </div>
         <div class="exp-body">
-          <h3 class="exp-role">Manager (20–40+ hrs/wk)</h3>
+          <h3 class="exp-role">Manager</h3>
           <ul class="exp-bullets">
             <li>Managed daily store operations while maintaining a full engineering course load, demonstrating exceptional time management and work ethic.</li>
             <li>Led and supervised teams during peak-volume shifts, coordinating task delegation and maintaining quality standards under pressure.</li>
@@ -585,7 +697,9 @@ body {
   </div>
 </section>
 
-
+<!-- ============================================================
+     PROJECTS
+     ============================================================ -->
 <section class="section-projects" id="projects">
   <div class="section-inner">
     <div class="section-header">
@@ -603,6 +717,7 @@ body {
             <div class="thumb-fill" style="--thumb-color: linear-gradient(135deg, #2f180d, #6d3a20 42%, #c8874b 78%, #f0cb97);"></div>
             <div class="thumb-overlay"></div>
             <span class="card-category">Propulsion · Design</span>
+            <span class="card-research-badge">Project</span>
           </div>
           <div class="card-body">
             <h3 class="card-title">Novel Rocket Nozzle Design — Three-Leaf-Clover Outlet</h3>
@@ -613,53 +728,20 @@ body {
           </div>
         </a>
       </article>
-
-      <article class="project-card">
-        <a href="/projects/airfoil-optimization-research/" class="card-link">
-          <div class="card-thumb">
-            <div class="thumb-fill" style="--thumb-color: linear-gradient(135deg, #1f1a12, #615038 45%, #b89862 78%, #e6cf9f);"></div>
-            <div class="thumb-overlay"></div>
-            <span class="card-category">Aerodynamics · ML</span>
-          </div>
-          <div class="card-body">
-            <h3 class="card-title">Airfoil Optimization Research (VIP)</h3>
-            <p class="card-desc">Led a four-pronged VIP research program integrating Python, ML optimization, CFD, and physical wind tunnel testing. Headed the Python team developing a generative pipeline that takes four NACA parameters, produces the full airfoil profile, and auto-exports STL files for CFD runs.</p>
-            <div class="card-tags">
-              <span class="ctag">Python</span><span class="ctag">OpenFOAM</span><span class="ctag">ML Optimization</span><span class="ctag">Wind Tunnel</span>
-            </div>
-          </div>
-        </a>
-      </article>
-
+ 
       <article class="project-card">
         <a href="/projects/ice-accretion-research/" class="card-link">
           <div class="card-thumb">
             <div class="thumb-fill" style="--thumb-color: linear-gradient(135deg, #14181b, #52504a 42%, #97846b 78%, #d8c3a1);"></div>
             <div class="thumb-overlay"></div>
             <span class="card-category">CFD · Ice Accretion</span>
+            <span class="card-research-badge">Research</span>
           </div>
           <div class="card-body">
             <h3 class="card-title">Ice Accretion Research — LEWICE / OpenFOAM (VIP)</h3>
             <p class="card-desc">Led integration of NASA LEWICE Ice Accretion software on macOS for the team, ran airfoil geometries from Blender through the full OpenFOAM + ParaView pipeline, and visualized and plotted accretion data in Excel. Presented findings at GURC and published a paper at the AIAA Region II Conference.</p>
             <div class="card-tags">
               <span class="ctag">OpenFOAM</span><span class="ctag">LEWICE</span><span class="ctag">ParaView</span><span class="ctag">Blender</span><span class="ctag">AIAA Publication</span>
-            </div>
-          </div>
-        </a>
-      </article>
-
-      <article class="project-card">
-        <a href="/projects/design-class-competition-winner/" class="card-link">
-          <div class="card-thumb">
-            <div class="thumb-fill" style="--thumb-color: linear-gradient(135deg, #17120f, #574539 45%, #b18151 78%, #e6c08c);"></div>
-            <div class="thumb-overlay"></div>
-            <span class="card-category">Design · Fabrication</span>
-          </div>
-          <div class="card-body">
-            <h3 class="card-title">Design Class Competition — Winner</h3>
-            <p class="card-desc">Won the class design competition by building a functional machine under tight resource and time constraints. Full design-to-fabrication cycle using SolidWorks modeling, laser-cut components via Inkscape, version-controlled with GitHub, and assembled with soldering and hands-on fabrication.</p>
-            <div class="card-tags">
-              <span class="ctag">SolidWorks</span><span class="ctag">Inkscape</span><span class="ctag">GitHub</span><span class="ctag">Fabrication</span><span class="ctag">Soldering</span>
             </div>
           </div>
         </a>
@@ -685,19 +767,18 @@ body {
       </article>
 
       <article class="project-card">
-        <a href="/projects/isentropic-flow-sensitivity/" class="card-link">
+        <a href="/projects/design-class-competition-winner/" class="card-link">
           <div class="card-thumb">
-            <div class="thumb-fill" style="--thumb-color: linear-gradient(135deg, #0f0a18, #2a1840 40%, #5a3090 70%, #9060c8);"></div>
+            <div class="thumb-fill" style="--thumb-color: linear-gradient(135deg, #17120f, #574539 45%, #b18151 78%, #e6c08c);"></div>
             <div class="thumb-overlay"></div>
-            <span class="card-category">Propulsion · Analysis</span>
-            <span class="card-research-badge">Research</span>
+            <span class="card-category">Design · Fabrication</span>
+            <span class="card-research-badge">Project</span>
           </div>
           <div class="card-body">
-            <p class="card-venue">Undergraduate Research — Summer 2024</p>
-            <h3 class="card-title">Isentropic Flow Parameter Sensitivity in Variable-Geometry Inlets</h3>
-            <p class="card-desc">MATLAB-based sensitivity study of isentropic flow parameters across variable-geometry inlet configurations, analyzing Mach number, pressure ratio, and area ratio relationships.</p>
+            <h3 class="card-title">Design Class Competition — Winner</h3>
+            <p class="card-desc">Won the class design competition by building a functional machine under tight resource and time constraints. Full design-to-fabrication cycle using SolidWorks modeling, laser-cut components via Inkscape, version-controlled with GitHub, and assembled with soldering and hands-on fabrication.</p>
             <div class="card-tags">
-              <span class="ctag">MATLAB</span><span class="ctag">Isentropic Flow</span><span class="ctag">Inlet Design</span><span class="ctag">Parametric Study</span>
+              <span class="ctag">SolidWorks</span><span class="ctag">Inkscape</span><span class="ctag">GitHub</span><span class="ctag">Fabrication</span><span class="ctag">Soldering</span>
             </div>
           </div>
         </a>
@@ -707,7 +788,9 @@ body {
   </div>
 </section>
 
-
+<!-- ============================================================
+     ABOUT / SKILLS
+     ============================================================ -->
 <section class="section-about" id="about">
   <div class="section-inner">
     <div class="about-inner">
@@ -765,241 +848,27 @@ body {
 
 <script>
 (function() {
-  
-  var canvas = document.getElementById('nozzleCanvas');
-  if (!canvas) return;
-  var ctx = canvas.getContext('2d');
-  var W = 480, H = 480;
-  canvas.width = W; canvas.height = H;
-
-  var accent  = 'rgba(200,169,110,';  
-  var accent2 = 'rgba(126,184,212,';  
-
-  
-  function nozzleY(x) {
-    
-    var cx = 0.4; 
-    var R_inlet = 0.32, R_throat = 0.12, R_exit = 0.28;
-    if (x < cx) {
-      var t = x / cx;
-      return R_inlet + (R_throat - R_inlet) * (3*t*t - 2*t*t*t);
-    } else {
-      var t = (x - cx) / (1 - cx);
-      return R_throat + (R_exit - R_throat) * (3*t*t - 2*t*t*t);
+  var DURATION = 40000;
+  var orbits = document.querySelectorAll('.solar-scene .orbit');
+  orbits.forEach(function(orbit) {
+    var startDeg = parseFloat(orbit.style.getPropertyValue('--start')) || 0;
+    var label = orbit.querySelector('.planet-label');
+    var planet = orbit.querySelector('.planet');
+    if (!label || !planet) return;
+    var planetSize = parseFloat(window.getComputedStyle(planet).width) || 16;
+    var offset = -(planetSize / 2 + 13);
+    var startTime = null;
+    function tick(ts) {
+      if (!startTime) startTime = ts;
+      var elapsed = ts - startTime;
+      var currentDeg = startDeg + (elapsed / DURATION) * 360;
+      label.style.transform = 'translate(-50%, ' + offset + 'px) rotate(' + (-currentDeg) + 'deg)';
+      requestAnimationFrame(tick);
     }
-  }
+    requestAnimationFrame(tick);
+  });
 
-  
-  function machColor(mach, alpha) {
-    if (mach < 0.95) {
-      var t = mach / 0.95;
-      var r = Math.round(30 + t * 80);
-      var g = Math.round(80 + t * 60);
-      var b = Math.round(180 + t * 30);
-      return 'rgba(' + r + ',' + g + ',' + b + ',' + alpha + ')';
-    } else if (mach < 1.05) {
-      return 'rgba(240,240,255,' + alpha + ')';
-    } else {
-      var t = Math.min((mach - 1.05) / 1.5, 1);
-      var r = Math.round(180 + t * 20);
-      var g = Math.round(140 - t * 60);
-      var b = Math.round(60 - t * 40);
-      return 'rgba(' + r + ',' + g + ',' + b + ',' + alpha + ')';
-    }
-  }
-
-  
-  var NLINES = 18;
-  var streamlines = [];
-  for (var i = 0; i < NLINES; i++) {
-    var frac = (i + 0.5) / NLINES; 
-    streamlines.push({ frac: frac, phase: Math.random() * Math.PI * 2, speed: 0.4 + Math.random() * 0.5 });
-  }
-
-  
-  var shockParticles = [];
-  for (var i = 0; i < 60; i++) {
-    shockParticles.push({
-      x: 0.55 + Math.random() * 0.45,
-      y: (Math.random() - 0.5) * 0.95,
-      vx: 0.002 + Math.random() * 0.003,
-      vy: (Math.random() - 0.5) * 0.001,
-      size: 1 + Math.random() * 2,
-      alpha: 0.3 + Math.random() * 0.5
-    });
-  }
-
-  var time = 0;
-  var CX = W * 0.5, CY = H * 0.5;
-  var NW = W * 0.9, NH = H * 0.7;
-  var NX = CX - NW / 2, NY = CY - NH / 2;
-
-  function draw() {
-    ctx.clearRect(0, 0, W, H);
-
-    
-    var bg = ctx.createRadialGradient(CX, CY, 0, CX, CY, W * 0.55);
-    bg.addColorStop(0, 'rgba(14,20,30,0.95)');
-    bg.addColorStop(1, 'rgba(10,10,10,0)');
-    ctx.fillStyle = bg;
-    ctx.fillRect(0, 0, W, H);
-
-    
-    ctx.save();
-    ctx.beginPath();
-    
-    for (var xi = 0; xi <= 100; xi++) {
-      var xf = xi / 100;
-      var yf = nozzleY(xf);
-      var px = NX + xf * NW;
-      var py = NY + (0.5 - yf) * NH;
-      xi === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
-    }
-    
-    for (var xi = 100; xi >= 0; xi--) {
-      var xf = xi / 100;
-      var yf = nozzleY(xf);
-      var px = NX + xf * NW;
-      var py = NY + (0.5 + yf) * NH;
-      ctx.lineTo(px, py);
-    }
-    ctx.closePath();
-
-    
-    var flowGrad = ctx.createLinearGradient(NX, 0, NX + NW, 0);
-    flowGrad.addColorStop(0,   'rgba(30,80,160,0.18)');
-    flowGrad.addColorStop(0.38,'rgba(50,130,220,0.22)');
-    flowGrad.addColorStop(0.42,'rgba(230,230,255,0.28)');
-    flowGrad.addColorStop(0.55,'rgba(200,150,60,0.22)');
-    flowGrad.addColorStop(1,   'rgba(180,90,30,0.15)');
-    ctx.fillStyle = flowGrad;
-    ctx.fill();
-
-    
-    ctx.strokeStyle = accent + '0.55)';
-    ctx.lineWidth = 1.5;
-    ctx.stroke();
-    ctx.restore();
-
-    
-    ctx.save();
-    for (var si = 0; si < streamlines.length; si++) {
-      var sl = streamlines[si];
-      var frac = sl.frac; 
-      var symFrac = frac <= 0.5 ? frac * 2 : (1 - frac) * 2; 
-      var centerFrac = 1 - symFrac; 
-
-      ctx.beginPath();
-      var moved = false;
-      for (var xi = 0; xi <= 120; xi++) {
-        var xf = xi / 120;
-        var wallY = nozzleY(xf);
-        
-        var py_frac = (frac - 0.5) * 2 * wallY; 
-
-        
-        var localMach = xf < 0.4 ? (0.2 + xf * 2.0) : (1.0 + (xf - 0.4) * 2.5);
-        var waveAmp = centerFrac * 0.006 * Math.max(0, 1 - Math.abs(localMach - 1) * 3);
-        var phaseShift = xf * 8 + time * sl.speed;
-        var waveY = waveAmp * Math.sin(phaseShift + sl.phase);
-
-        var px = NX + xf * NW;
-        var py = CY + (py_frac + waveY) * NH;
-
-        var insideWall = Math.abs(py_frac) < wallY - 0.01;
-        if (!insideWall) { moved = false; continue; }
-
-        if (!moved) { ctx.moveTo(px, py); moved = true; }
-        else { ctx.lineTo(px, py); }
-      }
-      var alpha = 0.12 + centerFrac * 0.25;
-      var mach_approx = 1.5;
-      ctx.strokeStyle = accent2 + alpha + ')';
-      ctx.lineWidth = 0.7 + centerFrac * 0.5;
-      ctx.stroke();
-    }
-    ctx.restore();
-
-    
-    ctx.save();
-    var shockX = 0.62;
-    var shockPX = NX + shockX * NW;
-    var shockTop = CY - nozzleY(shockX) * NH * 0.85;
-    var shockBot = CY + nozzleY(shockX) * NH * 0.85;
-    var shimmer = 0.4 + 0.3 * Math.sin(time * 1.2);
-    ctx.beginPath();
-    ctx.moveTo(shockPX - 6, shockTop);
-    ctx.lineTo(shockPX + 6, shockBot);
-    ctx.strokeStyle = 'rgba(255,255,255,' + shimmer + ')';
-    ctx.lineWidth = 1.2;
-    ctx.setLineDash([4, 4]);
-    ctx.stroke();
-    ctx.setLineDash([]);
-    ctx.restore();
-
-    
-    ctx.save();
-    for (var pi = 0; pi < shockParticles.length; pi++) {
-      var p = shockParticles[pi];
-      p.x += p.vx;
-      if (p.x > 1.02) p.x = 0.55 + Math.random() * 0.02;
-      var wallY = nozzleY(p.x);
-      if (Math.abs(p.y) > wallY) p.y *= 0.95;
-      var px = NX + p.x * NW;
-      var py = CY + p.y * NH;
-      var mach = 1 + (p.x - 0.4) * 2.2;
-      ctx.beginPath();
-      ctx.arc(px, py, p.size, 0, Math.PI * 2);
-      ctx.fillStyle = machColor(mach, p.alpha * 0.7);
-      ctx.fill();
-    }
-    ctx.restore();
-
-    
-    ctx.save();
-    var throatX = NX + 0.4 * NW;
-    ctx.beginPath();
-    ctx.moveTo(throatX, CY - nozzleY(0.4) * NH);
-    ctx.lineTo(throatX, CY + nozzleY(0.4) * NH);
-    ctx.strokeStyle = accent + '0.45)';
-    ctx.lineWidth = 1;
-    ctx.setLineDash([3, 5]);
-    ctx.stroke();
-    ctx.setLineDash([]);
-    
-    ctx.font = '500 9px Space Mono, monospace';
-    ctx.fillStyle = accent + '0.7)';
-    ctx.textAlign = 'center';
-    ctx.fillText('M=1', throatX, NY - 8);
-    ctx.restore();
-
-    
-    ctx.save();
-    ctx.font = '700 13px Space Mono, monospace';
-    ctx.fillStyle = accent2 + '0.65)';
-    ctx.textAlign = 'center';
-    ctx.fillText('M > 1', NX + NW * 0.78, CY + 5);
-    ctx.font = '400 9px Space Mono, monospace';
-    ctx.fillStyle = 'rgba(126,184,212,0.4)';
-    ctx.fillText('supersonic', NX + NW * 0.78, CY + 18);
-    ctx.restore();
-
-    
-    ctx.save();
-    ctx.beginPath();
-    ctx.arc(CX, CY, W * 0.46, 0, Math.PI * 2);
-    ctx.strokeStyle = accent + '0.04)';
-    ctx.lineWidth = 1;
-    ctx.stroke();
-    ctx.restore();
-
-    time += 0.025;
-    requestAnimationFrame(draw);
-  }
-
-  draw();
-
-  
+  // Smooth scroll for anchor links
   document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
     anchor.addEventListener('click', function(e) {
       var target = document.querySelector(this.getAttribute('href'));
